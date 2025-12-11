@@ -9,10 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.praveenposwal.androidapp.R
 import com.praveenposwal.androidapp.databinding.FragmentHomeBinding
+import com.praveenposwal.androidapp.ui.MainActivity
 import com.praveenposwal.androidapp.ui.PostAdapter
+import com.praveenposwal.androidapp.ui.postdetails.PostDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import androidx.navigation.fragment.findNavController
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -28,8 +29,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.onFavoriteClick(post, isFavorite)
             },
             onItemClick = { post ->
-                val action = HomeFragmentDirections.actionHomeFragmentToPostDetailsFragment(post)
-                findNavController().navigate(action)
+                (requireActivity() as MainActivity).navigateTo(PostDetailsFragment.newInstance(post))
             }
         )
         binding.rvPosts.adapter = adapter

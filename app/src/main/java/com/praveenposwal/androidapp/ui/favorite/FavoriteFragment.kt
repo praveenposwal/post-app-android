@@ -9,10 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.praveenposwal.androidapp.R
 import com.praveenposwal.androidapp.databinding.FragmentFavoriteBinding
+import com.praveenposwal.androidapp.ui.MainActivity
 import com.praveenposwal.androidapp.ui.PostAdapter
+import com.praveenposwal.androidapp.ui.postdetails.PostDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import androidx.navigation.fragment.findNavController
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
@@ -28,9 +29,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                 viewModel.onFavoriteClick(post, isFavorite)
             },
             onItemClick = { post ->
-                // Navigate to details from favorites too if needed, or just leave empty
-                val action = FavoriteFragmentDirections.actionFavoriteFragmentToPostDetailsFragment(post)
-                findNavController().navigate(action)
+                (requireActivity() as MainActivity).navigateTo(PostDetailsFragment.newInstance(post))
             }
         )
         binding.rvFavorites.adapter = adapter

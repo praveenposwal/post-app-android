@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.praveenposwal.androidapp.R
 import com.praveenposwal.androidapp.databinding.FragmentSettingsBinding
+import com.praveenposwal.androidapp.ui.MainActivity
+import com.praveenposwal.androidapp.ui.login.LoginFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +21,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
-            findNavController().navigate(R.id.action_settingsFragment_to_loginFragment)
+            (requireActivity() as MainActivity).navigateTo(LoginFragment(), addToBackStack = false)
         }
     }
 }

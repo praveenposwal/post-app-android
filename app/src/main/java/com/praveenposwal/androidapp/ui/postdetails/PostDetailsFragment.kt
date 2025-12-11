@@ -6,10 +6,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 import com.praveenposwal.androidapp.R
 import com.praveenposwal.androidapp.common.Resource
 import com.praveenposwal.androidapp.databinding.FragmentPostDetailsBinding
+import com.praveenposwal.androidapp.domain.model.Post
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -17,9 +17,26 @@ import kotlinx.coroutines.launch
 class PostDetailsFragment : Fragment(R.layout.fragment_post_details) {
 
     private val viewModel: PostDetailsViewModel by viewModels()
-    private val args: PostDetailsFragmentArgs by navArgs()
+    private lateinit var post: Post
     private lateinit var binding: FragmentPostDetailsBinding
     private lateinit var commentAdapter: CommentAdapter
+
+    companion object {
+        private const val ARG_POST = "post"
+
+        fun newInstance(post: Post): PostDetailsFragment {
+            val fragment = PostDetailsFragment()
+            val args = Bundle()
+            args.putParcelable(ARG_POST, post)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        post = arguments?.getParcelable(ARG_POST) ?: throw IllegalArgumentException("Post argument required")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,11 +45,10 @@ class PostDetailsFragment : Fragment(R.layout.fragment_post_details) {
         setupUI()
         observeComments()
         
-        viewModel.getComments(args.post.id)
+        viewModel.getComments(post.id)
     }
 
     private fun setupUI() {
-        val post = args.post
         binding.tvTitle.text = post.title
         binding.tvBody.text = post.body
 
